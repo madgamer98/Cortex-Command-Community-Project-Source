@@ -70,9 +70,9 @@ void HDFirearm::Clear()
     m_FireFrame = false;
     m_FiredLastFrame = false;
     m_AlreadyClicked = false;
-	m_RoundsFired = 0;
+    m_RoundsFired = 0;
     m_CanFire = true;
-	m_IsAnimatedManually = false;
+    m_IsAnimatedManually = false;
 }
 
 
@@ -138,9 +138,9 @@ int HDFirearm::Create(const HDFirearm &reference)
     m_MuzzleOff = reference.m_MuzzleOff;
     m_EjectOff = reference.m_EjectOff;
     m_MagOff = reference.m_MagOff;
-	m_RoundsFired = reference.m_RoundsFired;
+    m_RoundsFired = reference.m_RoundsFired;
     m_CanFire = reference.m_CanFire;
-	m_IsAnimatedManually = reference.m_IsAnimatedManually;
+    m_IsAnimatedManually = reference.m_IsAnimatedManually;
 
     return 0;
 }
@@ -158,21 +158,21 @@ int HDFirearm::ReadProperty(std::string propName, Reader &reader)
 {
     if (propName == "Magazine")
     {
-        const Entity* pObj = g_PresetMan.GetEntityPreset(reader);
+        const Entity *pObj = g_PresetMan.GetEntityPreset(reader);
         if (pObj)
         {
-            m_pMagazineReference = dynamic_cast<const Magazine*>(pObj);
+            m_pMagazineReference = dynamic_cast<const Magazine *>(pObj);
 
             delete m_pMagazine;
-            m_pMagazine = dynamic_cast<Magazine*>(m_pMagazineReference->Clone());
+            m_pMagazine = dynamic_cast<Magazine *>(m_pMagazineReference->Clone());
         }
     }
     else if (propName == "Flash")
     {
-        const Entity* pObj = g_PresetMan.GetEntityPreset(reader);
+        const Entity *pObj = g_PresetMan.GetEntityPreset(reader);
         if (pObj)
         {
-            m_pFlash = dynamic_cast<Attachable*>(pObj->Clone());
+            m_pFlash = dynamic_cast<Attachable *>(pObj->Clone());
             if (m_pFlash)
                 m_pFlash->Attach(this);
         }
@@ -730,7 +730,7 @@ void HDFirearm::Update()
 
             // Get the parent root of this AEmitter
 // TODO: Potentially get this once outside instead, like in attach/detach")
-            MovableObject* pRootParent = GetRootParent();
+            MovableObject *pRootParent = GetRootParent();
 
             // Full auto
             if (m_FullAuto)
@@ -779,10 +779,10 @@ void HDFirearm::Update()
             Vector roundVel;
             Vector shellVel;
 
-            Round* pRound = 0;
+            Round *pRound = 0;
             Vector tempNozzle;
             Vector tempEject;
-            MOPixel* pPixel;
+            MOPixel *pPixel;
             float shake, particleSpread, shellSpread, lethalRange;
 
             int player = -1;
@@ -820,7 +820,7 @@ void HDFirearm::Update()
                 Vector particleVel;
 
                 // Launch all particles in round
-                MovableObject* pParticle = 0;
+                MovableObject *pParticle = 0;
                 while (!pRound->IsEmpty())
                 {
                     pParticle = pRound->PopNextParticle();
@@ -838,12 +838,12 @@ void HDFirearm::Update()
                     totalFireForce += pParticle->GetMass() * pParticle->GetVel().GetMagnitude();
 
                     // Detach if it's an attachable
-                    Attachable* pAttachable = dynamic_cast<Attachable*>(pParticle);
+                    Attachable *pAttachable = dynamic_cast<Attachable *>(pParticle);
                     if (pAttachable)
                     {
                         pAttachable->Detach();
                         // Activate if it is some kind of grenade or whatnot.
-                        ThrownDevice* pTD = dynamic_cast<ThrownDevice*>(pAttachable);
+                        ThrownDevice *pTD = dynamic_cast<ThrownDevice *>(pAttachable);
                         if (pTD)
                             pTD->Activate();
                     }
@@ -859,7 +859,7 @@ void HDFirearm::Update()
                     pParticle->SetIgnoresTeamHits(true);
 
                     // Decide for how long until the bullet tumble and start to lose lethality
-                    pPixel = dynamic_cast<MOPixel*>(pParticle);
+                    pPixel = dynamic_cast<MOPixel *>(pParticle);
                     if (pPixel)
                         pPixel->SetLethalRange(lethalRange);
 
@@ -868,7 +868,7 @@ void HDFirearm::Update()
                 pParticle = 0;
 
                 // Launch shell, if there is one.
-                MovableObject* pShell = pRound->GetShell() ? dynamic_cast<MovableObject*>(pRound->GetShell()->Clone()) : 0;
+                MovableObject *pShell = pRound->GetShell() ? dynamic_cast<MovableObject *>(pRound->GetShell()->Clone()) : 0;
                 if (pShell)
                 {
                     tempEject = m_EjectOff.GetYFlipped(m_HFlipped);
@@ -882,10 +882,10 @@ void HDFirearm::Update()
                     pShell->SetVel(m_Vel + shellVel);
                     pShell->SetRotAngle(m_Rotation.GetRadAngle());
                     pShell->SetAngularVel(pShell->GetAngularVel() + (m_ShellAngVelRange * NormalRand()));
-                    //                  // Set the ejected shell to not hit this HeldDevice's parent, if applicable
-                    //                  if (m_FireIgnoresThis)
-                    //                      pParticle->SetWhichMOToNotHit(pRootParent, 1.0f);
-                                        // Set the team so alarm events that happen if these gib won't freak out the guy firing
+                // Set the ejected shell to not hit this HeldDevice's parent, if applicable
+                // if (m_FireIgnoresThis)
+                // pParticle->SetWhichMOToNotHit(pRootParent, 1.0f
+                // Set the team so alarm events that happen if these gib won't freak out the guy firing
                     pShell->SetTeam(m_Team);
                     g_MovableMan.AddParticle(pShell);
                     pShell = 0;
@@ -902,7 +902,6 @@ void HDFirearm::Update()
             }
             pRound = 0;
         }
-
     }
 /* This is done when manually reloading now
     // No rounds left in current mag, so eject mag and reload!
