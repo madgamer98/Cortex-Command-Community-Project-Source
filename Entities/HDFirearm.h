@@ -722,6 +722,16 @@ ENTITYALLOCATION(HDFirearm)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// Method:  CanFire
+//////////////////////////////////////////////////////////////////////////////////////////
+// Description:     If true then the HDFireArm can fire
+// Arguments:       None.
+// Return value:    Whether this HDFirearm can fire in the current frame
+
+    bool CanFire() const { return m_CanFire; }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
 // Method:  IsAnimatedManually
 //////////////////////////////////////////////////////////////////////////////////////////
 // Description:     If true then the m_Frame property is not changed bye the Update function
@@ -815,7 +825,7 @@ protected:
     // The audio of this FireArm being reloaded.
     SoundContainer m_ReloadStartSound;
     SoundContainer m_ReloadEndSound;
-
+    
     // Rate of fire, in rounds per min.
     // If 0, firearm is semi-automatic (ie only one discharge per activation).
     int m_RateOfFire;
@@ -881,6 +891,8 @@ protected:
     bool m_AlreadyClicked;
 	// How many rounds were fired during this frame
 	int m_RoundsFired;
+    // Whether or not the gun can fire during the current frame
+    bool m_CanFire;
 	// If true m_Frame is not changed during an update hence the animation 
 	// is done by external Lua code
 	bool m_IsAnimatedManually;
